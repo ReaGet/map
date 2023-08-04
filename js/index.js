@@ -13,7 +13,6 @@ ymaps.ready().then(() => {
       mapStateAutoApply: true,
   }).then(function (route) {
     const pathsObjects = ymaps.geoQuery(route.getPaths()),
-      edges = [],
       coords = [];
 
     const marker = new ymaps.Placemark(myMap.getCenter(), {
@@ -24,14 +23,15 @@ ymaps.ready().then(() => {
       // Своё изображение иконки метки.
       iconImageHref: 'img/car.svg',
       // Размеры метки.
-      iconImageSize: [30, 42],
+      iconImageSize: [40, 40],
       // Смещение левого верхнего угла иконки относительно
       // её "ножки" (точки привязки).
-      iconImageOffset: [-5, -38]
+      iconImageOffset: [-20, -20]
     });
 
     pathsObjects.each(function (path) {
-      var coordinates = path.geometry.getCoordinates();
+      let coordinates = path.geometry.getCoordinates().filter((_, index) => index % 2);
+      // let coordinates = path.geometry.getCoordinates();
       coords.push(...coordinates);
     });
 
@@ -48,10 +48,30 @@ ymaps.ready().then(() => {
       .add(marker);
 
     // console.log(marker.geometry.setCoordinates)
+    const steps = 1000;
 
-    setInterval(() => {
-      const newCoords = coords.splice(0, 1)[0];
-      marker.geometry.setCoordinates(newCoords);
-    }, 100);
+    function moveBetweenCoords(pointA, pointB) {
+      const [x1, y1] = pointA,
+        [x2, y2] = pointB;
+      
+      let position = [...pointA];
+        
+      const dx = (x2 - x1) / steps,
+        dy = (y2 - y1) / steps;
+
+      setInterval(() => {
+        position[0] += dx;
+        position[1] += dy;
+
+        marker.geometry.setCoordinates(position);
+      }, 1000 / 60);
+    }
+
+    moveBetweenCoords(coords[0], coords[coords.length - 1]);
+    
+    // setInterval(() => {
+    //   const newCoords = coords.splice(0, 1)[0];
+    //   marker.geometry.setCoordinates(newCoords);
+    // }, 100);
   });
 });
