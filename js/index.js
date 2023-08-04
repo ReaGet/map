@@ -50,28 +50,28 @@ ymaps.ready().then(() => {
     // console.log(marker.geometry.setCoordinates)
     const steps = 1000;
 
-    function moveBetweenCoords(pointA, pointB) {
-      const [x1, y1] = pointA,
-        [x2, y2] = pointB;
+    // function moveBetweenCoords(pointA, pointB) {
+    //   const [x1, y1] = pointA,
+    //     [x2, y2] = pointB;
       
-      let position = [...pointA];
+    //   let position = [...pointA];
         
-      const dx = (x2 - x1) / steps,
-        dy = (y2 - y1) / steps;
+    //   const dx = (x2 - x1) / steps,
+    //     dy = (y2 - y1) / steps;
 
-      setInterval(() => {
-        position[0] += dx;
-        position[1] += dy;
+    //   setInterval(() => {
+    //     position[0] += dx;
+    //     position[1] += dy;
 
-        marker.geometry.setCoordinates(position);
-      }, 1000 / 60);
-    }
+    //     marker.geometry.setCoordinates(position);
+    //   }, 1000 / 60);
+    // }
 
-    moveBetweenCoords(coords[0], coords[coords.length - 1]);
+    // moveBetweenCoords(coords[0], coords[coords.length - 1]);
     
-    // setInterval(() => {
-    //   const newCoords = coords.splice(0, 1)[0];
-    //   marker.geometry.setCoordinates(newCoords);
-    // }, 100);
+    setInterval(() => {
+      const newCoords = coords.splice(0, 1)[0];
+      marker.geometry.setCoordinates(newCoords);
+    }, 100);
   });
 });
